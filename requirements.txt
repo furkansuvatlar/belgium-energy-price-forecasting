@@ -1,0 +1,8 @@
+pandas
+numpy
+google-cloud-bigquery
+entsoe-py
+dbt-bigquery
+xgboost
+joblib
+db-dtypes
