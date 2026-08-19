@@ -1,0 +1,8 @@
+version: 2
+sources:
+  - name: raw_sources
+    database: belgium-energy-data-123
+    schema: raw_energy_data
+    tables:
+      - name: raw_belgium_day_ahead_prices
+        description: "Raw Belgian electricity price data extracted from the ENTSO-E API."
