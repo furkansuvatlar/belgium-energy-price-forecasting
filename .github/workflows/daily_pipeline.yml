@@ -2,7 +2,7 @@ name: Daily Belgium Energy Price Forecast Pipeline
 
 on:
   schedule:
-    - cron: '0 2 * * *'  # Every day at 2:00 AM UTC
+    - cron: '0 2 * * *'  # Every day at 2:00 AM UTC (TSİ 05:00)
   workflow_dispatch:      # Manual trigger button
 
 jobs:
@@ -61,3 +61,18 @@ jobs:
         env:
           ENTSOE_API_KEY: ${{ secrets.ENTSOE_API_KEY }}
         run: python predict_future.py
+
+      - name: Step 4 - Update Dashboard Performance Model
+        run: |
+          cd belgium_energy_dbt
+          dbt run --select fact_forecast_performance --profiles-dir ~/.dbt
+
+      - name: Send Slack Notification (Success)
+        if: success()
+        run: |
+          curl -X POST -H 'Content-type: application/json' --data '{"text":"✅ *Successful:* Belgium Energy Pipeline ran successfully. New data has been uploaded to Looker Studio!"}' ${{ secrets.SLACK_WEBHOOK_URL }}
+
+      - name: Send Slack Notification (Failure)
+        if: failure()
+        run: |
+          curl -X POST -H 'Content-type: application/json' --data '{"text":"🚨 *Failure:* An issue occurred while running the Belgium Energy Pipeline! Please check the GitHub Actions logs."}' ${{ secrets.SLACK_WEBHOOK_URL }}
