@@ -3,7 +3,7 @@ name: Daily Belgium Energy Price Forecast Pipeline
 on:
   schedule:
     - cron: '0 2 * * *'  # Every day at 2:00 AM UTC
-  workflow_dispatch:      # Manuel trigger button
+  workflow_dispatch:      # Manual trigger button
 
 jobs:
   run-pipeline:
@@ -33,11 +33,31 @@ jobs:
           ENTSOE_API_KEY: ${{ secrets.ENTSOE_API_KEY }}
         run: python fetch_data.py
 
+      - name: Setup dbt profiles.yml
+        run: |
+          mkdir -p ~/.dbt
+          cat <<'EOF' > ~/.dbt/profiles.yml
+          belgium_energy_price_forecasting:
+            target: dev
+            outputs:
+              dev:
+                type: bigquery
+                method: service-account-json
+                project: belgium-energy-data-123
+                dataset: raw_energy_data
+                keyfile_json: ${{ secrets.GCP_SA_KEY }}
+                threads: 4
+                timeout_seconds: 300
+                priority: interactive
+          EOF
+
       - name: Step 2 - Run dbt Transformations & Feature Engineering
         run: |
           cd belgium_energy_dbt
           dbt deps
-          dbt run
+          dbt run --profiles-dir ~/.dbt
 
       - name: Step 3 - Predict Future Prices & Upload to BigQuery
+        env:
+          ENTSOE_API_KEY: ${{ secrets.ENTSOE_API_KEY }}
         run: python predict_future.py
