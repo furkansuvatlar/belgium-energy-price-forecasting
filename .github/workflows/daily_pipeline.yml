@@ -37,7 +37,7 @@ jobs:
         run: |
           mkdir -p ~/.dbt
           cat <<'EOF' > ~/.dbt/profiles.yml
-          belgium_energy_price_forecasting:
+          belgium_energy_dbt:
             target: dev
             outputs:
               dev:
