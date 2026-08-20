@@ -8,7 +8,8 @@ def fetch_actual_data():
     client = EntsoePandasClient(api_key=config.ENTSOE_API_KEY)
 
     # Determining the date range for the last 7 days
-    end_date = pd.Timestamp.now(tz='Europe/Brussels')
+    now = pd.Timestamp.now(tz='Europe/Brussels')
+    end_date = now.normalize() + pd.Timedelta(days=2)
     start_date = end_date - pd.Timedelta(days=7)
     print(f"Connecting to ENTSO-E API to fetch actual data for {config.COUNTRY_CODE} from {start_date} to {end_date}...")
     
@@ -32,7 +33,7 @@ def fetch_actual_data():
 
         # Configure job to replace/update the raw table with the latest 7-day window
         job_config = bigquery.LoadJobConfig(
-            write_disposition="WRITE_APPEND"
+            write_disposition="WRITE_TRUNCATE",  # Overwrite the table with new data
         )
 
         print(f"Uploading data to BigQuery table: {output_table}...")
