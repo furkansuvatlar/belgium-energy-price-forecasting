@@ -11,7 +11,7 @@ forecasts as (
     select
         forecast_timestamp as timestamp,
         predicted_price_eur_mwh as predicted_price
-    from {{ ref('fact_forecasted_prices') }}
+    from {{ target.project }}.dbt_belgium_energy.fact_forecasted_prices
 )
 
 select
