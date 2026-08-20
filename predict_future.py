@@ -55,7 +55,7 @@ output_df = future_df[['forecast_timestamp', 'predicted_price_eur_mwh', 'price_h
 output_df['created_at'] = pd.Timestamp.now()
 
 job_config = bigquery.LoadJobConfig(
-    write_disposition = "WRITE_TRUNCATE",)
+    write_disposition = "WRITE_APPEND",)
 
 print(f"Writing predictions to BigQuery table: {output_table}...")
 job = client.load_table_from_dataframe(output_df, output_table, job_config=job_config)
