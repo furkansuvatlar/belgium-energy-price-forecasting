@@ -44,7 +44,7 @@ jobs:
                 type: bigquery
                 method: service-account-json
                 project: belgium-energy-data-123
-                dataset: raw_energy_data
+                dataset: dbt_belgium_energy
                 keyfile_json: ${{ secrets.GCP_SA_KEY }}
                 threads: 4
                 timeout_seconds: 300
