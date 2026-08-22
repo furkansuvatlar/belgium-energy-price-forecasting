@@ -39,6 +39,11 @@ ORDER BY price_timestamp ASC
 """
 df_weather = client.query(query_future_weather).to_dataframe()
 
+# Ensure matching timestamp formats before merging
+future_df['forecast_timestamp'] = pd.to_datetime(future_df['forecast_timestamp']).dt.tz_localize(None)
+if not df_weather.empty:
+    df_weather['forecast_timestamp'] = pd.to_datetime(df_weather['forecast_timestamp']).dt.tz_localize(None)
+
 # Merge future dates with the weather/load forecasts
 future_df = pd.merge(future_df, df_weather, on='forecast_timestamp', how='left')
 
@@ -55,8 +60,7 @@ future_df['price_month'] = future_df['forecast_timestamp'].dt.month
 future_df['price_year'] = future_df['forecast_timestamp'].dt.year
 future_df['is_weekend'] = future_df['day_of_week'].apply(lambda x: 1 if x in [6, 7] else 0)
 
-# 3. Dynamic Lag Features Corrected
-# Taking arrays of the last 24 hours and the first 24 hours from the 168h window
+# 3. Dynamic Lag Features
 future_df['price_lag_24h'] = df_recent['price_eur_mwh'].iloc[-24:].values
 future_df['price_lag_168h'] = df_recent['price_eur_mwh'].iloc[0:24].values
 future_df['price_rolling_avg_24h'] = df_recent['price_eur_mwh'].iloc[-24:].mean()
@@ -77,7 +81,13 @@ output_table = f"{project_id}.dbt_belgium_energy.fact_forecasted_prices"
 output_df = future_df[['forecast_timestamp', 'predicted_price_eur_mwh', 'price_hour', 'day_of_week']].copy()
 output_df['created_at'] = pd.Timestamp.now()
 
-job_config = bigquery.LoadJobConfig(write_disposition="WRITE_APPEND")
+# Fix BigQuery Timestamp formatting issues
+output_df['forecast_timestamp'] = pd.to_datetime(output_df['forecast_timestamp'])
+output_df['created_at'] = pd.to_datetime(output_df['created_at'])
+
+job_config = bigquery.LoadJobConfig(
+    write_disposition="WRITE_APPEND"
+)
 print(f"Writing predictions to BigQuery table: {output_table}...")
 job = client.load_table_from_dataframe(output_df, output_table, job_config=job_config)
 job.result()
