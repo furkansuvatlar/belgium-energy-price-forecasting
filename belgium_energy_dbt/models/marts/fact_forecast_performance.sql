@@ -2,7 +2,7 @@
 
 with actuals as (
     select
-        price_timestamp as timestamp,
+        cast(price_timestamp as timestamp) as timestamp,
         price_eur_mwh as actual_price
     from {{ ref('stg_day_ahead_prices') }}
 ),
@@ -13,7 +13,7 @@ forecasts as (
         predicted_price
     from (
         select
-            forecast_timestamp as timestamp,
+            cast(forecast_timestamp as timestamp) as timestamp,
             predicted_price_eur_mwh as predicted_price,
             row_number() over (partition by forecast_timestamp order by created_at desc) as rn
         from {{ target.project }}.dbt_belgium_energy.fact_forecasted_prices
