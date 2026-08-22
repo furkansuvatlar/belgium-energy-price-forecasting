@@ -2,6 +2,9 @@ WITH staging_data AS (
     SELECT 
         price_timestamp,
         price_eur_mwh,
+        forecast_load_mw,
+        Solar,
+        `Wind Onshore`,
         country AS country_code
     FROM {{ ref('stg_day_ahead_prices') }}
 ),
@@ -16,6 +19,9 @@ feature_engineering AS (
         EXTRACT(YEAR FROM price_timestamp) AS price_year,
         country_code,
         price_eur_mwh,
+        forecast_load_mw,
+        Solar,
+        `Wind Onshore`,
         CASE WHEN price_eur_mwh < 0 THEN TRUE ELSE FALSE END AS is_negative_price,
 
         -- Lagged features
