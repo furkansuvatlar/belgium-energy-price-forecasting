@@ -9,9 +9,16 @@ with actuals as (
 
 forecasts as (
     select
-        forecast_timestamp as timestamp,
-        predicted_price_eur_mwh as predicted_price
-    from {{ target.project }}.dbt_belgium_energy.fact_forecasted_prices
+        timestamp,
+        predicted_price
+    from (
+        select
+            forecast_timestamp as timestamp,
+            predicted_price_eur_mwh as predicted_price,
+            row_number() over (partition by forecast_timestamp order by created_at desc) as rn
+        from {{ target.project }}.dbt_belgium_energy.fact_forecasted_prices
+    )
+    where rn = 1
 )
 
 select
