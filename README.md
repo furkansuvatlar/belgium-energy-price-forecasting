@@ -19,7 +19,7 @@ An end-to-end MLOps and Data Engineering pipeline that autonomously fetches dail
 
 ## Live Dashboard & Performance Monitoring
 
-![Energy_Price_Dashboard.pdf](<img width="1117" height="832" alt="Ekran görüntüsü 2026-08-24 085701" src="https://github.com/user-attachments/assets/94824831-5662-486a-b030-cb4d870e0088" />
+![Energy_Price_Dashboard](<img width="1117" height="832" alt="Ekran görüntüsü 2026-08-24 085701" src="https://github.com/user-attachments/assets/94824831-5662-486a-b030-cb4d870e0088" />
 )
 
 
