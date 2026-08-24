@@ -19,8 +19,8 @@ An end-to-end MLOps and Data Engineering pipeline that autonomously fetches dail
 
 ## Live Dashboard & Performance Monitoring
 
-![Energy_Price_Dashboard](<img width="1117" height="832" alt="Ekran görüntüsü 2026-08-24 085701" src="https://github.com/user-attachments/assets/94824831-5662-486a-b030-cb4d870e0088" />
-)
+<img width="1117" height="832" alt="Ekran görüntüsü 2026-08-24 085701" src="https://github.com/user-attachments/assets/ae46bdc8-5cc2-4a40-8a72-8319346d2031" />
+
 
 
 🔗 **Live Report:** [View Interactive Looker Studio Dashboard](https://datastudio.google.com/u/0/reporting/4df8d091-e8d0-4fdb-a047-227f663efcb6/page/6ht6F)
