@@ -19,7 +19,7 @@ An end-to-end MLOps and Data Engineering pipeline that autonomously fetches dail
 
 ## Live Dashboard & Performance Monitoring
 
-<img width="1117" height="832" alt="Ekran görüntüsü 2026-08-24 085701" src="https://github.com/user-attachments/assets/ae46bdc8-5cc2-4a40-8a72-8319346d2031" />
+<img width="1217" height="913" alt="Ekran görüntüsü 2026-08-28 152533" src="https://github.com/user-attachments/assets/11c307b6-f46f-4c45-950b-11cab949a88a" />
 
 
 
