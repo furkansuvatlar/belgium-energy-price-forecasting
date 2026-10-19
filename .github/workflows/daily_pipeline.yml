@@ -55,7 +55,7 @@ jobs:
         run: |
           cd belgium_energy_dbt
           dbt deps
-          dbt run --profiles-dir ~/.dbt
+          dbt run --exclude fact_forecast_performance --profiles-dir ~/.dbt
 
       - name: Step 3 - Predict Future Prices & Upload to BigQuery
         env:
